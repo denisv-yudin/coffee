@@ -1,0 +1,96 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Coffee to Water Ratio Calculator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f9;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0;
+        }
+        .container {
+            background-color: #fff;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            width: 90%;
+            max-width: 400px;
+        }
+        h1 {
+            text-align: center;
+            color: #333;
+        }
+        label {
+            display: block;
+            margin-bottom: 5px;
+            color: #555;
+        }
+        input, select {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+        button {
+            width: 100%;
+            padding: 10px;
+            background-color: #007bff;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+        button:hover {
+            background-color: #0056b3;
+        }
+        .result {
+            margin-top: 20px;
+            text-align: center;
+            font-size: 18px;
+            color: #333;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>Coffee to Water Calculator</h1>
+        <label for="coffeeAmount">Coffee Amount (grams):</label>
+        <input type="number" id="coffeeAmount" placeholder="Enter coffee amount">
+
+        <label for="brewRatio">Brew Ratio:</label>
+        <select id="brewRatio">
+            <option value="15">1:15</option>
+            <option value="16">1:16</option>
+            <option value="17">1:17</option>
+            <option value="18">1:18</option>
+        </select>
+
+        <button onclick="calculateWater()">Calculate Water</button>
+
+        <div class="result" id="result"></div>
+    </div>
+
+    <script>
+        function calculateWater() {
+            const coffeeAmount = parseFloat(document.getElementById('coffeeAmount').value);
+            const brewRatio = parseFloat(document.getElementById('brewRatio').value);
+
+            if (isNaN(coffeeAmount) || coffeeAmount <= 0) {
+                document.getElementById('result').innerHTML = 'Please enter a valid coffee amount.';
+                return;
+            }
+
+            const waterAmount = coffeeAmount * brewRatio;
+            document.getElementById('result').innerHTML = `Water Needed: ${waterAmount.toFixed(2)} grams`;
+        }
+    </script>
+</body>
+</html>
