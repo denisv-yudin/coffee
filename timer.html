@@ -1,0 +1,196 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Android Stopwatch and Timers</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 20px;
+            background-color: #f4f4f9;
+        }
+        .container {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .timer-container {
+            margin: 15px;
+            padding: 15px;
+            border: 1px solid #ccc;
+            border-radius: 10px;
+            background-color: #fff;
+            width: 90%;
+            max-width: 300px;
+        }
+        .controls {
+            margin-top: 10px;
+        }
+        button {
+            padding: 10px 20px;
+            margin: 5px;
+            border: none;
+            border-radius: 5px;
+            background-color: #007bff;
+            color: white;
+            cursor: pointer;
+        }
+        button:disabled {
+            background-color: #ccc;
+        }
+        .laps {
+            margin-top: 10px;
+            text-align: left;
+        }
+    </style>
+</head>
+<body>
+<div class="container">
+    <!-- Stopwatch -->
+    <div class="timer-container">
+        <h2>Stopwatch</h2>
+        <div id="stopwatch">00:00:00</div>
+        <div class="controls">
+            <button id="startStopwatch">Start</button>
+            <button id="lapStopwatch">Lap</button>
+            <button id="resetStopwatch">Reset</button>
+        </div>
+        <div class="laps" id="laps"></div>
+    </div>
+
+    <!-- Timer 1 (8 minutes) -->
+    <div class="timer-container">
+        <h2>Timer 1 (8 Minutes)</h2>
+        <div id="timer1">08:00</div>
+        <div class="controls">
+            <button id="startTimer1">Start</button>
+            <button id="resetTimer1">Reset</button>
+        </div>
+    </div>
+
+    <!-- Timer 2 (12 minutes) -->
+    <div class="timer-container">
+        <h2>Timer 2 (12 Minutes)</h2>
+        <div id="timer2">12:00</div>
+        <div class="controls">
+            <button id="startTimer2">Start</button>
+            <button id="resetTimer2">Reset</button>
+        </div>
+    </div>
+</div>
+
+<script>
+    // Stopwatch logic
+    let stopwatchInterval;
+    let stopwatchTime = 0;
+    let laps = [];
+    const stopwatchDisplay = document.getElementById('stopwatch');
+    const lapDisplay = document.getElementById('laps');
+
+    function formatTime(time) {
+        const hours = Math.floor(time / 3600).toString().padStart(2, '0');
+        const minutes = Math.floor((time % 3600) / 60).toString().padStart(2, '0');
+        const seconds = (time % 60).toString().padStart(2, '0');
+        return `${hours}:${minutes}:${seconds}`;
+    }
+
+    document.getElementById('startStopwatch').addEventListener('click', () => {
+        if (stopwatchInterval) {
+            clearInterval(stopwatchInterval);
+            stopwatchInterval = null;
+            document.getElementById('startStopwatch').textContent = 'Start';
+        } else {
+            stopwatchInterval = setInterval(() => {
+                stopwatchTime++;
+                stopwatchDisplay.textContent = formatTime(stopwatchTime);
+            }, 1000);
+            document.getElementById('startStopwatch').textContent = 'Pause';
+        }
+    });
+
+    document.getElementById('lapStopwatch').addEventListener('click', () => {
+        laps.push(stopwatchTime);
+        const lapItem = document.createElement('div');
+        lapItem.textContent = `Lap ${laps.length}: ${formatTime(stopwatchTime)}`;
+        lapDisplay.appendChild(lapItem);
+    });
+
+    document.getElementById('resetStopwatch').addEventListener('click', () => {
+        clearInterval(stopwatchInterval);
+        stopwatchInterval = null;
+        stopwatchTime = 0;
+        stopwatchDisplay.textContent = '00:00:00';
+        laps = [];
+        lapDisplay.innerHTML = '';
+        document.getElementById('startStopwatch').textContent = 'Start';
+    });
+
+    // Timer 1 logic (8 minutes)
+    let timer1Interval;
+    let timer1Time = 8 * 60;
+    const timer1Display = document.getElementById('timer1');
+
+    function startTimer1() {
+        if (timer1Interval) return;
+
+        timer1Interval = setInterval(() => {
+            if (timer1Time <= 0) {
+                clearInterval(timer1Interval);
+                timer1Interval = null;
+                alert('Timer 1 finished!');
+                timer1Time = 8 * 60;
+                timer1Display.textContent = '08:00';
+            } else {
+                timer1Time--;
+                timer1Display.textContent = `${Math.floor(timer1Time / 60).toString().padStart(2, '0')}:${(timer1Time % 60).toString().padStart(2, '0')}`;
+            }
+        }, 1000);
+    }
+
+    document.getElementById('startTimer1').addEventListener('click', () => {
+        startTimer1();
+    });
+
+    document.getElementById('resetTimer1').addEventListener('click', () => {
+        clearInterval(timer1Interval);
+        timer1Interval = null;
+        timer1Time = 8 * 60;
+        timer1Display.textContent = '08:00';
+    });
+
+    // Timer 2 logic (12 minutes)
+    let timer2Interval;
+    let timer2Time = 12 * 60;
+    const timer2Display = document.getElementById('timer2');
+
+    function startTimer2() {
+        if (timer2Interval) return;
+
+        timer2Interval = setInterval(() => {
+            if (timer2Time <= 0) {
+                clearInterval(timer2Interval);
+                timer2Interval = null;
+                alert('Timer 2 finished!');
+                timer2Time = 12 * 60;
+                timer2Display.textContent = '12:00';
+            } else {
+                timer2Time--;
+                timer2Display.textContent = `${Math.floor(timer2Time / 60).toString().padStart(2, '0')}:${(timer2Time % 60).toString().padStart(2, '0')}`;
+            }
+        }, 1000);
+    }
+
+    document.getElementById('startTimer2').addEventListener('click', () => {
+        startTimer2();
+    });
+
+    document.getElementById('resetTimer2').addEventListener('click', () => {
+        clearInterval(timer2Interval);
+        timer2Interval = null;
+        timer2Time = 12 * 60;
+        timer2Display.textContent = '12:00';
+    });
+</script>
+</body>
+</html>
